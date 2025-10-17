@@ -1,9 +1,12 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 from app.models.user import LoginPayload
 from pydantic import ValidationError
 from app import db
 from bson import ObjectId
 from app.models.products import Product, ProductDBModel
+from app.decorators import token_required
+from datetime import datetime, timedelta, timezone
+import jwt
 
 main_bp = Blueprint('main_bp', __name__)
 
@@ -20,9 +23,18 @@ def login():
         return jsonify({"error": "Erro durante a requisição do dado"}),500
     
     if user_data.username == "admin" and user_data.password == "123":
-        return jsonify({"message": f"Login bem sucedido para o usuário {user_data.username}"})
-    else:
-        return jsonify({"error": "Credenciais inválidas"}), 401
+        token = jwt.encode(
+            {
+                "user_id": user_data.username,
+                "exp": datetime.now(tz=timezone.utc) + timedelta(minutes=30)
+            },
+            current_app.config['SECRET_KEY'],
+            algorithm="HS256"
+        )
+        
+        return jsonify({"access_token": token}), 200
+    
+    return jsonify({"error": "Credenciais inválidas"}), 401
 
 
 # RF: o sistema deve permitir que o usuário visualize a lista de produtos disponíveis
@@ -36,8 +48,17 @@ def get_products():
 
 # RF: o sistema deve permitir que o usuário adicione produtos a listagem
 @main_bp.route('/products', methods=['POST'])
-def create_products():
-    return jsonify(message="Esta é a rota de criação de produtos")
+@token_required
+def create_products(token):
+    try:
+        product = Product(**request.get_json())
+    except ValidationError as e:
+        return jsonify({"error": e.errors()}), 400
+    
+    result = db.products.insert_one(product.model_dump())
+
+    return jsonify({"message": "Produto criado com sucesso",
+                   "id": str(result.inserted_id)}), 201
 
 
 # RF: o sistema deve permitir que o usuário visualize os detalhes de um produto
@@ -77,6 +98,3 @@ def upload_sales():
 @main_bp.route('/')
 def index():
     return jsonify(message="Bem vindo ao StyleSync!")
-
-
-
