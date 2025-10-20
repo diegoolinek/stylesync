@@ -103,8 +103,19 @@ def update_product(token, product_id):
 
 # RF: o sistema deve permitir que o usuário delete um produto
 @main_bp.route('/product/<string:product_id>', methods=['DELETE'])
-def delete_product(product_id):
-    return jsonify({"message":f"Esta é a rota de deleção do produto {product_id}"})
+@token_required
+def delete_product(token, product_id):
+    try:
+        oid = ObjectId(product_id)
+    except Exception:
+        return jsonify({"error":"ID do produto inválido"}), 400
+
+    delete_product = db.products.delete_one({"_id": oid})
+
+    if delete_product.deleted_count == 0:
+        return jsonify({"error":f"O produto não foi encontrado"}), 404
+
+    return jsonify({"message":"Produto deletado com sucesso"}), 204
 
 
 # RF: o sistema deve permitir que o usuário delete um produto
