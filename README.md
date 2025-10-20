@@ -21,10 +21,6 @@ O **StyleSync** é uma API REST desenvolvida em Flask para gerenciamento de prod
 ### 📊 Gerenciamento de Vendas
 - **POST** `/sales/upload` - Importar vendas via arquivo CSV (requer autenticação)
 
-### 🏷️ Gerenciamento de Categorias
-- **GET** `/categories` - Listar categorias
-- **POST** `/categories` - Criar nova categoria
-
 ## 🛠️ Tecnologias Utilizadas
 
 - **Flask** - Framework web Python
@@ -40,19 +36,19 @@ O **StyleSync** é uma API REST desenvolvida em Flask para gerenciamento de prod
 ```
 stylesync-flask/
 ├── app/
-│   ├── __init__.py          # Configuração da aplicação Flask
-│   ├── decorators.py        # Decorators de autenticação
-│   ├── models/              # Modelos de dados
-│   │   ├── category.py      # Modelo de categoria
-│   │   ├── products.py      # Modelo de produto
-│   │   ├── sale.py          # Modelo de venda
-│   │   └── user.py          # Modelo de usuário
-│   └── routes/              # Rotas da API
-│       ├── main.py          # Rotas principais (produtos, vendas, auth)
-│       └── category_routes.py # Rotas de categorias
-├── config.py                # Configurações da aplicação
-├── run.py                   # Arquivo principal para execução
-└── tests/                   # Diretório de testes
+│   ├── __init__.py              # Configuração da aplicação Flask
+│   ├── decorators.py            # Decorators de autenticação
+│   ├── models/                  # Modelos de dados
+│   │   ├── category.py          # Modelo de categoria
+│   │   ├── products.py          # Modelo de produto
+│   │   ├── sale.py              # Modelo de venda
+│   │   └── user.py              # Modelo de usuário
+│   └── routes/                  # Rotas da API
+│       ├── main.py              # Rotas principais (produtos, vendas, auth)
+│       └── category_routes.py   # Rotas de categorias
+├── config.py                    # Configurações da aplicação
+├── run.py                       # Arquivo principal para execução
+└── tests/                       # Diretório de testes
 ```
 
 ## ⚙️ Configuração e Instalação
@@ -90,8 +86,8 @@ pip install -r requirements.txt
 ### 5. Configure as variáveis de ambiente
 Crie um arquivo `.env` na raiz do projeto:
 ```env
-MONGO_URI=mongodb://localhost:27017/stylesync
-SECRET_KEY=sua_chave_secreta_aqui
+MONGO_URI=mongodb://usuario:senha@host:porta/database
+SECRET_KEY=chave_secreta
 ```
 
 ### 6. Execute a aplicação
@@ -185,23 +181,6 @@ sale_date,product_id,quantity,total_value
 2024-01-16,507f1f77bcf86cd799439012,1,99.90
 ```
 
-### Categorias
-
-#### Listar Categorias
-```http
-GET /categories
-```
-
-#### Criar Categoria
-```http
-POST /categories
-Content-Type: application/json
-
-{
-    "name": "Categoria Exemplo",
-    "description": "Descrição da categoria"
-}
-```
 
 ## 🔒 Segurança
 
@@ -225,7 +204,7 @@ python -m pytest tests/
     "name": str,           # Nome do produto
     "price": float,        # Preço
     "description": str,    # Descrição (opcional)
-    "stock": int          # Quantidade em estoque
+    "stock": int           # Quantidade em estoque
 }
 ```
 
@@ -247,15 +226,6 @@ python -m pytest tests/
 }
 ```
 
-## 🚀 Deploy
-
-### Variáveis de Ambiente para Produção
-```env
-MONGO_URI=mongodb://usuario:senha@host:porta/database
-SECRET_KEY=chave_secreta
-```
-
-```
 
 ## 📄 Licença
 
@@ -263,4 +233,4 @@ Este projeto está sob a licença MIT.
 
 ## 👥 Autor
 
-- **Diego** - *Desenvolvedor* - [GitHub](https://github.com/diegoolinek)
+- **Diego Olinek** - *Desenvolvedor* - [GitHub](https://github.com/diegoolinek)
