@@ -191,10 +191,46 @@ sale_date,product_id,quantity,total_value
 
 ## 🧪 Testes
 
-Para executar os testes:
+O projeto utiliza o **pytest** como framework de testes para garantir a qualidade e funcionalidade do código.
+
+### Executando os Testes
+
+Para executar todos os testes:
 ```bash
 python -m pytest tests/
 ```
+
+Para executar os testes com informações detalhadas:
+```bash
+python -m pytest tests/ -v
+```
+
+Para executar um arquivo de teste específico:
+```bash
+python -m pytest tests/test_utils.py
+```
+
+### Estrutura dos Testes
+
+```
+tests/
+├── __init__.py
+└── test_utils.py          # Testes para funções utilitárias
+```
+
+### Testes Implementados
+
+#### Testes de Utilitários (`test_utils.py`)
+- **`test_format_currency_with_decimal()`** - Testa formatação de moeda com valores decimais
+- **`test_format_currency_with_integer()`** - Testa formatação de moeda com valores inteiros  
+- **`test_format_currency_with_zero()`** - Testa formatação de moeda com valor zero
+
+### Convenções de Testes
+
+- Todos os arquivos de teste devem começar com `test_`
+- As funções de teste devem começar com `test_`
+- Use nomes descritivos que indiquem o que está sendo testado
+- Mantenha os testes simples e focados em uma única funcionalidade
 
 ## 📝 Modelos de Dados
 
